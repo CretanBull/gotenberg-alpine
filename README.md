@@ -32,17 +32,6 @@ The official `gotenberg/gotenberg:8.38.1` image is built on **Debian 13.7 (Trixi
 
 This repository rebuilds Gotenberg and its backing engines from source on **Alpine Linux**, drastically shrinking the attack surface and eliminating known-severity vulnerabilities.
 
-### Upstream vs. Hardened Comparison (`v8.38.1`)
-
-| Scan Target | `gotenberg/gotenberg:8.38.1` (Debian 13.7) | `cretanbull/gotenberg-alpine:8.38.1-libreoffice` | How It Was Remediated |
-| :--- | :---: | :---: | :--- |
-| **OS Packages** | 1,618 (1 Critical, 310 High) | **0 Fixable** | Migrated from Debian 13.7 to fully-patched Alpine 3.24 |
-| **`usr/bin/gotenberg`** | 23 | **0** | Recompiled from source with latest Go toolchain; `echo/v5` upgraded to v5.4.1 |
-| **`usr/bin/pdfcpu`** | 20 | **1 (UNKNOWN, no fix)** | Recompiled from source with patched transitive Go modules; 1 informational advisory remains |
-| **`usr/bin/pdftk-all.jar`** | 1 | **Removed** | Stripped legacy Java runtime & `pdftk` JAR; replaced by native `qpdf` and `pdfcpu` |
-
-> 📋 See the full [Trivy Scan Report](./trivy-report.md) for detailed findings and analysis.
-
 ---
 
 ## Features
@@ -215,7 +204,16 @@ These variables are pre-configured in the image and wire Gotenberg to the correc
 
 ## Security
 
-This image is built with a zero fixable CVE target. The latest Trivy scan results:
+### Upstream vs. Hardened Comparison (`v8.38.1`)
+
+| Scan Target | `gotenberg/gotenberg:8.38.1` (Debian 13.7) | `cretanbull/gotenberg-alpine:8.38.1-libreoffice` | How It Was Remediated |
+| :--- | :---: | :---: | :--- |
+| **OS Packages** | 1,618 (1 Critical, 310 High) | **0 Fixable** | Migrated from Debian 13.7 to fully-patched Alpine 3.24 |
+| **`usr/bin/gotenberg`** | 23 | **0** | Recompiled from source with latest Go toolchain; `echo/v5` upgraded to v5.4.1 |
+| **`usr/bin/pdfcpu`** | 20 | **1 (UNKNOWN, no fix)** | Recompiled from source with patched transitive Go modules; 1 informational advisory remains |
+| **`usr/bin/pdftk-all.jar`** | 1 | **Removed** | Stripped legacy Java runtime & `pdftk` JAR; replaced by native `qpdf` and `pdfcpu` |
+
+### Latest Trivy Scan (`gotenberg-alpine:8.38.1-libreoffice`)
 
 | Target | Type | CVEs |
 | :--- | :--- | :---: |
