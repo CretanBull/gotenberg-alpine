@@ -213,14 +213,6 @@ These variables are pre-configured in the image and wire Gotenberg to the correc
 | **`usr/bin/pdfcpu`** | 20 | **1 (UNKNOWN, no fix)** | Recompiled from source with patched transitive Go modules; 1 informational advisory remains |
 | **`usr/bin/pdftk-all.jar`** | 1 | **Removed** | Stripped legacy Java runtime & `pdftk` JAR; replaced by native `qpdf` and `pdfcpu` |
 
-### Latest Trivy Scan (`gotenberg-alpine:8.38.1-libreoffice`)
-
-| Target | Type | CVEs |
-| :--- | :--- | :---: |
-| Alpine 3.24.3 (OS packages) | alpine | ✅ 0 |
-| `usr/bin/gotenberg` | gobinary | ✅ 0 |
-| `usr/bin/pdfcpu` | gobinary | ⚠️ 1 (UNKNOWN, no fix available) |
-
 📋 Full findings and analysis → [trivy-report.md](./trivy-report.md)
 
 To report a security vulnerability privately, please use
