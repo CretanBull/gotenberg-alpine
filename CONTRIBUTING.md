@@ -51,7 +51,7 @@ If something isn't working as expected, please [open a GitHub issue](https://git
 - The exact `docker run` command or `docker-compose` snippet you used
 - The full error output or unexpected behavior you observed
 - The host OS, CPU architecture (`amd64` / `arm64`), and Docker version
-- The image tag you pulled (e.g., `gotenberg-alpine:8.38.1`)
+- The image tag you pulled (e.g., `gotenberg-alpine:8.38.1-libreoffice`)
 
 > **Tip:** Run `docker inspect <image>` and include the `Labels` section — it often contains useful version metadata.
 
@@ -126,11 +126,11 @@ git clone https://github.com/<your-username>/gotenberg-alpine.git
 cd gotenberg-alpine
 
 # Build the image — tag it with the real version
-# (this will take several minutes on first run — Go + LibreOffice compile from source)
-docker build -t gotenberg-alpine:8.38.1 .
+# (this will take several minutes on first run — Gotenberg and pdfcpu compile from source)
+docker build -t gotenberg-alpine:8.38.1-libreoffice .
 
 # Smoke-test: start the container and hit the health endpoint
-docker run --rm -d --name gotenberg-test -p 3000:3000 gotenberg-alpine:8.38.1
+docker run --rm -d --name gotenberg-test -p 3000:3000 gotenberg-alpine:8.38.1-libreoffice
 sleep 5
 curl -sf http://localhost:3000/health && echo "✅ Health check passed"
 docker stop gotenberg-test
@@ -151,7 +151,7 @@ Run the following steps from the project root:
 #### Step 1 — Build the image
 
 ```bash
-docker build -t gotenberg-alpine:8.38.1 .
+docker build -t gotenberg-alpine:8.38.1-libreoffice .
 ```
 
 ---
@@ -161,7 +161,7 @@ docker build -t gotenberg-alpine:8.38.1 .
 Exporting avoids Docker socket issues across all environments (rootless Docker, Podman, CI runners).
 
 ```bash
-docker save gotenberg-alpine:8.38.1 -o gotenberg-alpine.tar
+docker save gotenberg-alpine:8.38.1-libreoffice -o gotenberg-alpine.tar
 ```
 
 ---
@@ -352,8 +352,8 @@ This project tracks [Semantic Versioning](https://semver.org/) scoped to the **G
 
 | Image Tag | Meaning |
 |:---|:---|
-| `8.38.1` | Tracks Gotenberg `v8.38.1`, latest hardened build |
-| `8.38.1-alpine3.24` | Locked to a specific Alpine version (for reproducibility) |
+| `8.38.1-libreoffice` | Tracks Gotenberg `v8.38.1` with LibreOffice, latest hardened build |
+| `8.38.1-libreoffice-alpine3.24` | Locked to a specific Alpine version (for reproducibility) |
 | `latest` | Points to the most recent stable hardened build |
 
 **Release cadence:**
