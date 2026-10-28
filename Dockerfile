@@ -18,13 +18,24 @@ WORKDIR /src
 # Clone Gotenberg v8.38.1
 RUN git clone --depth 1 --branch ${GOTENBERG_VERSION} https://github.com/gotenberg/gotenberg.git .
 
-# Remove the pdftk module registration so Gotenberg does not require PDFTK_BIN_PATH or Java
-RUN sed -i '/pdftk/d' pkg/standard/imports.go
+# Remove pdftk from all entry-points that import it (main, chromium, libreoffice variants)
+# and strip "pdftk" from every per-feature engine default list in pdfengines.go
+RUN sed -i '/pdftk/d' pkg/standard/imports.go && \
+    sed -i '/pdftk/d' pkg/standard/chromium/imports.go && \
+    sed -i '/pdftk/d' pkg/standard/libreoffice/imports.go && \
+    sed -i \
+        -e 's/, "pdftk"//g' \
+        -e 's/"pdftk", //g' \
+        -e 's/"pdftk",//g' \
+        -e 's/"pdftk"//g' \
+        pkg/modules/pdfengines/pdfengines.go
 
 # Force upgrade echo/v5 to v5.4.1+ and patch all transitive Go dependencies
+# Pin go-jose/v4 to v4.1.6 (fixes CVE-2026-116587 HIGH) and x/net to v0.62.0 (fixes CVE-2026-78661, CVE-2026-97045)
 RUN go get -u github.com/labstack/echo/v5@v5.4.1 && \
+    go get github.com/go-jose/go-jose/v4@v4.1.6 && \
+    go get golang.org/x/net@v0.62.0 && \
     go get -u \
-    golang.org/x/net \
     golang.org/x/crypto \
     golang.org/x/sys \
     golang.org/x/text \
@@ -75,7 +86,7 @@ RUN apk update && \
       harfbuzz \
       libreoffice \
       qpdf \
-      perl-image-exiftool \
+      exiftool \
       fontconfig \
       ttf-dejavu \
       ttf-liberation \
