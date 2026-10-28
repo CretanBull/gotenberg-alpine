@@ -1,7 +1,7 @@
 # Gotenberg Alpine (Hardened Edition)
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/CretanBull/gotenberg-alpine.svg)](https://hub.docker.com/r/CretanBull/gotenberg-alpine)
-[![Docker Image Size](https://img.shields.io/docker/image-size/CretanBull/gotenberg-alpine/latest)](https://hub.docker.com/r/CretanBull/gotenberg-alpine)
+[![Docker Pulls](https://img.shields.io/docker/pulls/cretanbull/gotenberg-alpine.svg)](https://hub.docker.com/r/cretanbull/gotenberg-alpine)
+[![Docker Image Size](https://img.shields.io/docker/image-size/cretanbull/gotenberg-alpine/8.38.1-libreoffice)](https://hub.docker.com/r/cretanbull/gotenberg-alpine)
 [![Trivy Scan](https://img.shields.io/badge/Trivy-0%20OS%20CVEs-brightgreen?logo=aquasecurity)](./trivy-report.md)
 [![Alpine](https://img.shields.io/badge/Alpine-3.24-0D597F?logo=alpinelinux&logoColor=white)](https://alpinelinux.org)
 [![Gotenberg Version](https://img.shields.io/badge/Gotenberg-v8.38.1-blue)](https://github.com/gotenberg/gotenberg/releases/tag/v8.38.1)
@@ -16,6 +16,7 @@ A security-hardened, **Alpine Linux** rebuild of [Gotenberg](https://gotenberg.d
 - [Why This Image Exists](#why-this-image-exists)
 - [Features](#features)
 - [Quick Start](#quick-start)
+- [Usage](#usage)
 - [Build Arguments](#build-arguments)
 - [Runtime Environment Variables](#runtime-environment-variables)
 - [Supported Conversion Engines](#supported-conversion-engines)
@@ -33,7 +34,7 @@ This repository rebuilds Gotenberg and its backing engines from source on **Alpi
 
 ### Upstream vs. Hardened Comparison (`v8.38.1`)
 
-| Scan Target | `gotenberg/gotenberg:8.38.1` (Debian 13.7) | `CretanBull/gotenberg-alpine:8.38.1` | How It Was Remediated |
+| Scan Target | `gotenberg/gotenberg:8.38.1` (Debian 13.7) | `cretanbull/gotenberg-alpine:8.38.1-libreoffice` | How It Was Remediated |
 | :--- | :---: | :---: | :--- |
 | **OS Packages** | 1,618 (1 Critical, 310 High) | **0 Fixable** | Migrated from Debian 13.7 to fully-patched Alpine 3.24 |
 | **`usr/bin/gotenberg`** | 23 | **0** | Recompiled from source with latest Go toolchain; `echo/v5` upgraded to v5.4.1 |
@@ -68,10 +69,10 @@ git clone https://github.com/CretanBull/gotenberg-alpine.git
 cd gotenberg-alpine
 
 # Build (takes 5–15 minutes on first run)
-docker build -t gotenberg-alpine:8.38.1 .
+docker build -t gotenberg-alpine:8.38.1-libreoffice .
 
 # Run
-docker run --rm -p 3000:3000 gotenberg-alpine:8.38.1
+docker run --rm -p 3000:3000 gotenberg-alpine:8.38.1-libreoffice
 ```
 
 ### Option B — Pull from Docker Hub
@@ -79,7 +80,7 @@ docker run --rm -p 3000:3000 gotenberg-alpine:8.38.1
 If the image has been published to Docker Hub:
 
 ```bash
-docker run --rm -p 3000:3000 CretanBull/gotenberg-alpine:8.38.1
+docker run --rm -p 3000:3000 cretanbull/gotenberg-alpine:8.38.1-libreoffice
 ```
 
 ### Docker Compose
@@ -87,7 +88,7 @@ docker run --rm -p 3000:3000 CretanBull/gotenberg-alpine:8.38.1
 ```yaml
 services:
   gotenberg:
-    image: CretanBull/gotenberg-alpine:8.38.1
+    image: cretanbull/gotenberg-alpine:8.38.1-libreoffice
     ports:
       - "3000:3000"
     restart: unless-stopped
@@ -108,6 +109,54 @@ curl http://localhost:3000/health
 
 ---
 
+## Usage
+
+### Start the container
+
+```bash
+docker run -d \
+  --name gotenberg \
+  -p 3000:3000 \
+  gotenberg-alpine:8.38.1-libreoffice
+```
+
+Verify it is running:
+
+```bash
+docker ps | grep gotenberg
+docker logs gotenberg
+```
+
+### Convert a document to PDF
+
+Use the LibreOffice route to convert any supported office format (`.doc`, `.docx`, `.odt`, `.xlsx`, `.pptx`, `.rtf`, etc.) to PDF:
+
+```bash
+curl -X POST http://localhost:3000/forms/libreoffice/convert \
+  -F "files=@$HOME/Downloads/your-document.docx" \
+  -o output.pdf
+```
+
+> **Note:** Use `$HOME` instead of `~` — curl does not expand tilde inside `-F` flags.
+
+### Convert HTML to PDF (Chromium)
+
+```bash
+curl -X POST http://localhost:3000/forms/chromium/convert/html \
+  -F "files=@$HOME/Downloads/index.html" \
+  -o output.pdf
+```
+
+### Stop and remove the container
+
+```bash
+docker stop gotenberg && docker rm gotenberg
+```
+
+> For the full list of API routes and options, see the [official Gotenberg documentation](https://gotenberg.dev/docs).
+
+---
+
 ## Build Arguments
 
 These `ARG` values can be overridden at build time with `--build-arg`:
@@ -125,7 +174,7 @@ These `ARG` values can be overridden at build time with `--build-arg`:
 docker build \
   --build-arg GOTENBERG_VERSION=v8.39.0 \
   --build-arg GOTENBERG_USER_UID=2000 \
-  -t gotenberg-alpine:8.39.0 .
+  -t gotenberg-alpine:8.39.0-libreoffice .
 ```
 
 ---
