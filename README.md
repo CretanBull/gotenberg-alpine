@@ -1,7 +1,5 @@
 # Gotenberg Alpine (Hardened Edition)
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/cretanbull/gotenberg-alpine.svg)](https://hub.docker.com/r/cretanbull/gotenberg-alpine)
-[![Docker Image Size](https://img.shields.io/docker/image-size/cretanbull/gotenberg-alpine/8.38.1-libreoffice)](https://hub.docker.com/r/cretanbull/gotenberg-alpine)
 [![Trivy Scan](https://img.shields.io/badge/Trivy-0%20OS%20CVEs-brightgreen?logo=aquasecurity)](./trivy-report.md)
 [![Alpine](https://img.shields.io/badge/Alpine-3.24-0D597F?logo=alpinelinux&logoColor=white)](https://alpinelinux.org)
 [![Gotenberg Version](https://img.shields.io/badge/Gotenberg-v8.38.1-blue)](https://github.com/gotenberg/gotenberg/releases/tag/v8.38.1)
@@ -48,9 +46,7 @@ This repository rebuilds Gotenberg and its backing engines from source on **Alpi
 
 ## Quick Start
 
-### Option A — Build Locally
-
-Build the image from source (no Docker Hub account required):
+### Build Locally
 
 ```bash
 # Clone the repository
@@ -64,20 +60,12 @@ docker build -t gotenberg-alpine:8.38.1-libreoffice .
 docker run --rm -p 3000:3000 gotenberg-alpine:8.38.1-libreoffice
 ```
 
-### Option B — Pull from Docker Hub
-
-If the image has been published to Docker Hub:
-
-```bash
-docker run --rm -p 3000:3000 cretanbull/gotenberg-alpine:8.38.1-libreoffice
-```
-
 ### Docker Compose
 
 ```yaml
 services:
   gotenberg:
-    image: cretanbull/gotenberg-alpine:8.38.1-libreoffice
+    image: gotenberg-alpine:8.38.1-libreoffice
     ports:
       - "3000:3000"
     restart: unless-stopped
@@ -206,7 +194,7 @@ These variables are pre-configured in the image and wire Gotenberg to the correc
 
 ### Upstream vs. Hardened Comparison (`v8.38.1`)
 
-| Scan Target | `gotenberg/gotenberg:8.38.1` (Debian 13.7) | `cretanbull/gotenberg-alpine:8.38.1-libreoffice` | How It Was Remediated |
+| Scan Target | `gotenberg/gotenberg:8.38.1` (Debian 13.7) | `gotenberg-alpine:8.38.1-libreoffice` | How It Was Remediated |
 | :--- | :---: | :---: | :--- |
 | **OS Packages** | 1,618 (1 Critical, 310 High) | **0 Fixable** | Migrated from Debian 13.7 to fully-patched Alpine 3.24 |
 | **`usr/bin/gotenberg`** | 23 | **0** | Recompiled from source with latest Go toolchain; `echo/v5` upgraded to v5.4.1 |
