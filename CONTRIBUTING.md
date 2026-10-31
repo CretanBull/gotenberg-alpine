@@ -329,9 +329,9 @@ Since the `Dockerfile` is the only source artifact in this project, quality stan
 
 Before marking your PR as ready for review, please confirm all of the following:
 
-- [ ] `docker build -t gotenberg-alpine:local .` completes without errors
+- [ ] `docker build -t gotenberg-alpine:8.38.1-libreoffice .` completes without errors
 - [ ] `curl http://localhost:3000/health` returns HTTP 200 after `docker run`
-- [ ] `trivy image --exit-code 1 --severity HIGH,CRITICAL gotenberg-alpine:local` reports **0** findings
+- [ ] `trivy image --exit-code 1 --severity HIGH,CRITICAL gotenberg-alpine:8.38.1-libreoffice` reports **0** findings
 - [ ] Commit messages follow the [Conventional Commits](#4-commit-your-changes) format
 - [ ] `README.md` is updated if a version number, tool, or comparison table row changed
 - [ ] The PR title follows Conventional Commits format (e.g., `deps(dockerfile): upgrade Gotenberg to v8.39.0`)
