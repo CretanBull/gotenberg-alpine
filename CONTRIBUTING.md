@@ -367,7 +367,3 @@ If you would like to propose support for a new upstream Gotenberg version, open 
 ## License
 
 By contributing to this project, you agree that your contributions will be licensed under the same **[MIT License](./LICENSE)** that covers the project.
-
----
-
-*Thank you again for your interest in making `gotenberg-alpine` better for everyone. We look forward to your contribution!* 🚀
