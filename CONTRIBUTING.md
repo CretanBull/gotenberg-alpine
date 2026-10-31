@@ -213,7 +213,7 @@ Branch off `main` with a descriptive name. Use the following convention:
 | Feature / enhancement | `feat/<short-description>` | `feat/add-font-noto-extra` |
 | Dependency / version bump | `deps/<component>-<version>` | `deps/gotenberg-v8.39.0` |
 | Documentation | `docs/<short-description>` | `docs/update-quick-start` |
-| Security patch | `security/<short-description>` | `security/patch-golang-x-net` |
+| Security patch | `fix/<short-description>` | `fix/patch-golang-x-net` |
 
 ```bash
 git checkout -b feat/your-feature-name
